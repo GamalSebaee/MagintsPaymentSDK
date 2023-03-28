@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:titleTextColor="#ffffff">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Payment Details"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/toolbar_close"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:srcCompat="@drawable/baseline_close_24"
+                    app:tint="#ffffff"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/material_baseline_grid_2x" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/material_baseline_grid_2x" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            style="@style/labelInputStyle"
+            android:layout_width="0dp"
+            android:background="#F2F4F8"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/appbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:text="@string/amount_to_pay" />
+
+        <LinearLayout
+            android:id="@+id/card_name_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_amount">
+
+            <TextView
+                style="@style/labelInputStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/collect_card_name_on_card" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameOnCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="7dp"
+                android:background="@drawable/edt_bg_selector"
+                android:paddingBottom="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="17sp"
+                android:singleLine="true"
+                android:hint="@string/collect_card_name_on_card" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/card_number_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/card_name_layout">
+            <TextView
+                style="@style/labelInputStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/collect_card_number" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cardnumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/collect_card_number"
+                android:includeFontPadding="false"
+                android:inputType="number"
+                android:textSize="17sp"
+                android:background="@drawable/edt_bg_selector"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:singleLine="true"
+                android:maxLength="16"
+                android:text="5123450000000008" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/labelInputStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+             app:layout_constraintTop_toTopOf="@+id/spacer"
+            android:text="@string/expiry_date" />
+        <LinearLayout
+            android:id="@+id/card_expiry_month_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_date_splitter"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expiry_month"
+                style="@style/textInputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/collect_card_expiry_month"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:background="@drawable/edt_bg_selector"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:maxLength="2" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_date_splitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/card_expiry_month_layout"
+            app:layout_constraintEnd_toStartOf="@id/card_expiry_year_layout"
+            app:layout_constraintStart_toEndOf="@id/card_expiry_month_layout"
+            app:layout_constraintTop_toTopOf="@id/card_expiry_month_layout" />
+
+        <LinearLayout
+            android:id="@+id/card_expiry_year_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:gravity="start"
+            android:hint="Month"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toStartOf="@+id/spacer"
+            app:layout_constraintStart_toEndOf="@+id/tv_date_splitter"
+            app:layout_constraintTop_toTopOf="@+id/card_expiry_month_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expiry_year"
+                style="@style/textInputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/collect_card_expiry_year"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textSize="17sp"
+                android:background="@drawable/edt_bg_selector"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/spacer"
+            android:layout_width="30dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toStartOf="@id/card_cvv_layout"
+            app:layout_constraintStart_toEndOf="@id/card_expiry_year_layout"
+            app:layout_constraintTop_toBottomOf="@+id/card_number_layout" />
+
+        <LinearLayout
+            android:id="@+id/card_cvv_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toEndOf="@id/spacer"
+            app:layout_constraintTop_toTopOf="@+id/spacer">
+            <TextView
+                style="@style/labelInputStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/collect_card_cvv" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cvv"
+                style="@style/textInputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:hint="@string/collect_card_cvv"
+                android:singleLine="true"
+                android:paddingTop="7dp"
+                android:textSize="17sp"
+                android:background="@drawable/edt_bg_selector"
+                android:paddingBottom="7dp"
+                android:paddingStart="1dp"
+                android:paddingEnd="1dp"
+                android:inputType="number"
+                android:maxLength="3" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_save_cart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/save_card"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/card_cvv_layout"
+            />
+
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:enabled="false"
+            android:text="@string/collect_card_continue"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/cb_save_cart" />
+
+        <TextView
+            android:id="@+id/or_separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/collect_card_or"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/google_pay_button"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/submit_button"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/google_pay_button"
+            layout="@layout/googlepay_button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/material_baseline_grid_6x"
+            android:layout_marginBottom="@dimen/material_baseline_grid_2x"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
