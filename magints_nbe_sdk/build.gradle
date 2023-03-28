@@ -72,7 +72,7 @@ afterEvaluate {
 
                 groupId = 'com.github.GamalSebaee'
                 artifactId = 'magints-nbe-sdk'
-                version = '1.2.1'
+                version = '1.2.2'
             }
         }
     }
