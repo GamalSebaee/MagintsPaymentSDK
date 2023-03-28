@@ -2,19 +2,7 @@ plugins {
     id 'com.android.library'
     id 'maven-publish'
 }
-/*afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
 
-                groupId = 'com.github.GamalSebaee'
-                artifactId = 'magints-nbe-sdk'
-                version = '1.0.0'
-            }
-        }
-    }
-}*/
 android {
     namespace 'com.magints.nbe_sdk'
     compileSdk 33
@@ -76,4 +64,17 @@ dependencies {
     // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.GamalSebaee'
+                artifactId = 'magints-nbe-sdk'
+                version = '1.2.1'
+            }
+        }
+    }
 }
