@@ -492,11 +492,8 @@ public class Gateway {
     }
 
     String createAuthHeader(String sessionId) {
-        String value2 = "merchant." + merchantId + ":" + sessionId;
-        String value = "merchant." + merchantId;
-        Log.d("createAuthHeader","createAuthHeader:value2:"+value2+" - value: "+value);
-       // return "Basic " + Base64.encodeToString(value.getBytes(), Base64.NO_WRAP);
-        return "Basic bWVyY2hhbnQuVEVTVEVHUFRFU1Q6YzYyMmI3ZTllNTUwMjkyZGY0MDBiZTdkM2U4NDY0NzY=";
+        String value = "merchant." + merchantId + ":" + sessionId;
+        return "Basic " + Base64.encodeToString(value.getBytes(), Base64.NO_WRAP);
     }
 
     boolean isStatusCodeOk(int statusCode) {

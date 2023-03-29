@@ -513,7 +513,7 @@ public class ApiController {
         connection.setDoOutput(true);
         connection.setRequestMethod(method);
         connection.setFixedLengthStreamingMode(json.getBytes().length);
-        connection.setRequestProperty("User-Agent", "Gateway-Android-SDK/1.1.5");
+        connection.setRequestProperty("User-Agent",USER_AGENT);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Content-Length", Integer.toString(json.getBytes().length));
         if (!isEmpty(username) && !isEmpty(password)) {

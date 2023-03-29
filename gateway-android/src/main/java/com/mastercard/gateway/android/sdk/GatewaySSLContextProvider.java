@@ -10,7 +10,7 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
-public class GatewaySSLContextProvider {
+class GatewaySSLContextProvider {
 
     //Root certificate: Entrust G2 expires 18th Dec 2030 https://www.entrust.com/resources/certificate-solutions/tools/root-certificate-downloads
     static final String ROOT_CERTIFICATE_ENTRUST =
@@ -64,7 +64,7 @@ public class GatewaySSLContextProvider {
     public GatewaySSLContextProvider() {
     }
 
-    public SSLContext createSSLContext() throws Exception {
+    SSLContext createSSLContext() throws Exception {
         // create and initialize a KeyStore
         KeyStore keyStore = createKeyStore();
 
@@ -78,7 +78,7 @@ public class GatewaySSLContextProvider {
         return context;
     }
 
-    public KeyStore createKeyStore() throws Exception {
+    KeyStore createKeyStore() throws Exception {
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         keyStore.load(null, null);
 
