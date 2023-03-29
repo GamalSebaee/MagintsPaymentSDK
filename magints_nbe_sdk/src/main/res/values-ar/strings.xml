@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Magints NBE SDK</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="none">None</string>
+
+    <string name="main_configuration">إعدادات:</string>
+    <string name="main_merchant_id">رقم التاجر</string>
+    <string name="main_region">منطقة</string>
+    <string name="main_select_region">Select region</string>
+    <string name="main_heroku_test_server_url">Heroku Test Server URL</string>
+    <string name="main_process_a_payment">Process a Payment</string>
+
+    <string name="collect_card_name_on_card">الاسم على البطاقة</string>
+    <string name="collect_card_number">رقم البطاقة</string>
+    <string name="collect_card_expiry_month">MM</string>
+    <string name="collect_card_expiry_year">YY</string>
+    <string name="collect_card_cvv">CVV</string>
+    <string name="collect_card_continue">استمرار</string>
+    <string name="collect_card_or">- او -</string>
+
+    <!-- strings related to process payment screen -->
+    <string name="result_cdesc">result</string>
+    <string name="pay_you_payment_was_successful">تم الدفع الخاص بك بنجاح</string>
+    <string name="pay_error_card_info_not_collected">لم يتم جمع معلومات البطاقة</string>
+    <string name="pay_error_processing_your_payment">خطأ في معالجة الدفع الخاص بك</string>
+    <string name="pay_error_3ds_authentication_failed">فشلت مصادقة 3DS</string>
+    <string name="pay_error_unable_to_update_session">تعذر تحديث الجلسة</string>
+    <string name="pay_error_unable_to_create_session">تعذر إنشاء الجلسة</string>
+    <string name="pay_steps">خطوات:</string>
+    <string name="pay_1_create_session">1. إنشاء الجلسة</string>
+    <string name="pay_2_collect_card_info">2. جمع معلومات البطاقة</string>
+    <string name="pay_3_update_session_with_payer_data">3. تحديث الجلسة ببيانات الدافع</string>
+    <string name="pay_4_check_3ds_enrollment">4. تحقق من تسجيل 3DS</string>
+    <string name="pay_5_process_payment">5. دفع عملية</string>
+    <string name="pay_process_payment_for_1">Process Payment for $1</string>
+    <string name="pay_confirm_payment_details">تأكيد تفاصيل الدفع</string>
+    <string name="pay_1_dollar">$1.00</string>
+    <string name="pay_confirm_and_pay">اكد و ادفع</string>
+    <string name="pay_done">انتهى</string>
+    <string name="expiry_date">تاريخ الانتهاء</string>
+    <string name="amount_to_pay">%s %s</string>
+    <string name="save_card">احفظ البطاقة</string>
+</resources>

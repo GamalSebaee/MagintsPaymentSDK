@@ -67,7 +67,7 @@ public class ApiController {
         void onError(Throwable throwable);
     }
     public interface GenerateTokenCallback {
-        void onSuccess(String cardToken);
+        void onSuccess(GatewayMap cardToken);
 
         void onError(Throwable throwable);
     }
@@ -206,7 +206,7 @@ public class ApiController {
                 if (message.obj instanceof Throwable) {
                     callback.onError((Throwable) message.obj);
                 } else {
-                    callback.onSuccess((String) message.obj);
+                    callback.onSuccess((GatewayMap) message.obj);
                 }
             }
             return true;
@@ -263,7 +263,7 @@ public class ApiController {
         String jsonRequest = GSON.toJson(request);
         Log.d("requestUrl", "requestUrl : " + requestUrl);
         Log.d("requestUrlParameters", "jsonRequest : " + jsonRequest);
-        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "PUT", "merchant.TESTEGPTEST", "c622b7e9e550292df400be7d3e846476", HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
+        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "PUT", SDKConfigurations.requestUsername, SDKConfigurations.requestUserPassword, HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
 
         GatewayMap response = new GatewayMap(jsonResponse);
 
@@ -300,7 +300,7 @@ public class ApiController {
 
         Log.d("requestUrl", "requestUrl : " + requestUrl);
         Log.d("requestUrlParameter", "jsonRequest : " + jsonRequest);
-        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "PUT", "merchant.TESTEGPTEST", "c622b7e9e550292df400be7d3e846476", HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
+        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "PUT", SDKConfigurations.requestUsername, SDKConfigurations.requestUserPassword, HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
 
         Log.d("InitiateAuthentication", "InitiateAuthentication : " + jsonResponse);
         GatewayMap response = new GatewayMap(jsonResponse);
@@ -404,7 +404,7 @@ public class ApiController {
 
         Log.d("requestUrl", "requestUrl : " + requestUrl);
         Log.d("requestUrlParameter", "jsonRequest : " + jsonRequest);
-        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "PUT", "merchant.TESTEGPTEST", "c622b7e9e550292df400be7d3e846476", HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
+        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "PUT", SDKConfigurations.requestUsername, SDKConfigurations.requestUserPassword, HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
 
         GatewayMap response = new GatewayMap(jsonResponse);
 
@@ -429,7 +429,7 @@ public class ApiController {
         }
     }
 
-    String executeGenerateToken(String sessionId) throws Exception {
+    GatewayMap executeGenerateToken(String sessionId) throws Exception {
         GatewayMap request = new GatewayMap()
                 .set("session.id", sessionId)
                 .set("sourceOfFunds.type", "CARD");
@@ -440,7 +440,7 @@ public class ApiController {
 
         Log.d("requestUrl", "requestUrl : " + requestUrl);
         Log.d("requestUrlParameter", "jsonRequest : " + jsonRequest);
-        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "POST", "merchant.TESTEGPTEST", "c622b7e9e550292df400be7d3e846476", HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
+        String jsonResponse = doJsonRequest(new URL(requestUrl), jsonRequest, "POST", SDKConfigurations.requestUsername, SDKConfigurations.requestUserPassword, HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_CREATED);
 
         GatewayMap response = new GatewayMap(jsonResponse);
 
@@ -449,11 +449,7 @@ public class ApiController {
             throw new RuntimeException("Error processing payment");
         }
 
-        if (response.containsKey("token") && response.get("token") != null) {
-            return (String) response.get("token");
-        }else{
-            return null;
-        }
+        return response;
     }
 
 

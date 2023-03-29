@@ -426,6 +426,7 @@
             android:layout_height="0dp"
             android:background="#fff"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

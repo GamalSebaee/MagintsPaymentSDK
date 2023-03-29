@@ -1,5 +1,9 @@
 package com.magints.nbe_sdk.network.models;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.Gson;
+
 public class CallbackResultModel {
     private Object result;
     private String failMessage;
@@ -37,5 +41,11 @@ public class CallbackResultModel {
 
     public void setSavedCardInfo(SavedCardInfoModel savedCardInfo) {
         this.savedCardInfo = savedCardInfo;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

@@ -15,7 +15,7 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
-rootProject.name = "My Application"
+rootProject.name = "NBE SDK Sample"
 include ':app'
 include ':magints_nbe_sdk'
 include ':gateway-android'

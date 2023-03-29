@@ -15,7 +15,7 @@ import com.magints.nbe_sdk.network.ApiController;
 import com.magints.nbe_sdk.utils.Config;
 import com.mastercard.gateway.android.sdk.Gateway;
 
-public class MagintsNbeActivity extends AppCompatActivity {
+public class MagintsNbeActivity extends BaseActivity {
 
     ActivityMagintsNbeBinding binding;
     TextChangeListener textChangeListener = new TextChangeListener();

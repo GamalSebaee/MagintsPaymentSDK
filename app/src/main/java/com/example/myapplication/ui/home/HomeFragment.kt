@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.magints.nbe_sdk.MagintsNBESDK
 import com.magints.nbe_sdk.utils.PaymentEnvironment
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -47,17 +48,25 @@ class HomeFragment : Fragment() {
         val magintsNBESDK = MagintsNBESDK(
             activity, "TESTEGPTEST", "c622b7e9e550292df400be7d3e846476", 61, PaymentEnvironment.test
         )
+        var orderId = UUID.randomUUID().toString();
+        orderId = orderId.substring(0, orderId.indexOf('-'));
+
+        var transactionId = UUID.randomUUID().toString()
+        transactionId = transactionId.substring(0, transactionId.indexOf('-'))
+
+
         val paymentSession = binding.etSession.text.toString()
         if (paymentSession.isNotEmpty()) {
             magintsNBESDK.isCreateSessionAutomatically = false
             magintsNBESDK.sessionToken = paymentSession
         }
         magintsNBESDK.amount = "10.00"
-        //magintsNBESDK.currency="EGP";
+        magintsNBESDK.orderId=orderId
+        magintsNBESDK.merchantReference=transactionId
         magintsNBESDK.initPayment {
+            Log.d("magintsNBESDKCallBack", "Result info : $it")
             if (it != null) {
                 if (it.isStatus) {
-                    Log.d("magintsNBESDKCallBack", "Card info : " + it.savedCardInfo.toString())
                     Toast.makeText(activity, "Done Payment process", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(activity, "" + it.failMessage, Toast.LENGTH_LONG).show()

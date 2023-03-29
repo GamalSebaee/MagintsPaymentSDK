@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.magints.nbe_sdk.network.models.OrderModel;
-import com.magints.nbe_sdk.pages.MagintsNbeActivity;
 import com.magints.nbe_sdk.pages.ProcessPaymentActivity;
 import com.magints.nbe_sdk.utils.PaymentEnvironment;
 import com.magints.nbe_sdk.utils.SDKConfigurations;
@@ -56,6 +55,7 @@ public class MagintsNBESDK {
     }
 
     public void initPayment(SDKConfigurations.MagintsNBECallback magintsNBECallback) {
+
         if (!validateConfigurationParameters()) {
             return;
         }
@@ -87,6 +87,14 @@ public class MagintsNBESDK {
         } else {
             isValidOrderParameters = false;
             message = "Invalid amount to pay";
+        }
+        if (orderId == null || orderId.isEmpty()) {
+            isValidOrderParameters = false;
+            message = "Invalid order id";
+        }
+        if (merchantReference == null || merchantReference.isEmpty()) {
+            isValidOrderParameters = false;
+            message = "Invalid merchant Reference";
         }
         if (isValidOrderParameters) {
             SDKConfigurations.magintsNBECallback = magintsNBECallback;

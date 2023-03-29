@@ -31,7 +31,7 @@ import com.mastercard.gateway.android.sdk.GatewayMap;
 
 import java.util.UUID;
 
-public class ProcessPaymentActivity extends AppCompatActivity {
+public class ProcessPaymentActivity extends BaseActivity {
 
     static final int REQUEST_CARD_INFO = 100;
 
@@ -49,6 +49,8 @@ public class ProcessPaymentActivity extends AppCompatActivity {
     boolean saveCard = false;
 
     SavedCardInfoModel savedCardInfo;
+
+    boolean isOperationsCanceled=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,11 +73,8 @@ public class ProcessPaymentActivity extends AppCompatActivity {
             Log.e(ProcessPaymentActivity.class.getSimpleName(), "Invalid Gateway region value provided", e);
         }
 
-        // random order/txn IDs for example purposes
-        orderId = UUID.randomUUID().toString();
-        orderId = orderId.substring(0, orderId.indexOf('-'));
-        transactionId = UUID.randomUUID().toString();
-        transactionId = transactionId.substring(0, transactionId.indexOf('-'));
+        orderId = SDKConfigurations.getOrderModel().getOrderId();
+        transactionId = SDKConfigurations.getOrderModel().getMerchantReference();
         // bind buttons
         binding.startButton.setOnClickListener(v -> createSession());
         binding.confirmButton.setOnClickListener(v -> {
@@ -216,6 +215,14 @@ public class ProcessPaymentActivity extends AppCompatActivity {
     }
 
     void updateSession(String name, String number, String expiryMonth, String expiryYear, String cvv) {
+
+        if (saveCard) {
+            savedCardInfo = new SavedCardInfoModel();
+            savedCardInfo.setSecurityCode(cvv);
+            savedCardInfo.setNameOnCard(name);
+            savedCardInfo.setExpiryDate(expiryMonth, expiryYear);
+        }
+
         binding.updateSessionProgress.setVisibility(View.VISIBLE);
         setProcessTitle("Updating Session");
 
@@ -241,10 +248,19 @@ public class ProcessPaymentActivity extends AppCompatActivity {
         Log.d("savedCardToken", "inside  generate Token Request");
         apiController.generateToken(sessionId, new ApiController.GenerateTokenCallback() {
             @Override
-            public void onSuccess(String cardToken) {
-                if (savedCardInfo != null) {
-                    Log.d("savedCardToken", " savedCardToken : " + cardToken);
-                    savedCardInfo.setSavedCardToken(cardToken);
+            public void onSuccess(GatewayMap response) {
+                if (savedCardInfo != null && response != null) {
+                    savedCardInfo.setSavedCardToken((String) response.get("token"));
+                    if (response.containsKey("sourceOfFunds") &&
+                            response.containsKey("sourceOfFunds.provided") &&
+                            response.containsKey("sourceOfFunds.provided.card")) {
+                        savedCardInfo.setNumber((String) response.get("sourceOfFunds.provided.card.number"));
+                        savedCardInfo.setScheme((String) response.get("sourceOfFunds.provided.card.scheme"));
+                        savedCardInfo.setFundingMethod((String) response.get("sourceOfFunds.provided.card.fundingMethod"));
+                        savedCardInfo.setBrand((String) response.get("sourceOfFunds.provided.card.brand"));
+                        savedCardInfo.setExpiry((String) response.get("sourceOfFunds.provided.card.expiry"));
+                    }
+                    Log.d("savedCardToken", "inside savedCardToken date ");
                 }
             }
 
@@ -338,17 +354,12 @@ public class ProcessPaymentActivity extends AppCompatActivity {
             binding.startButton.setVisibility(View.GONE);
             binding.groupConfirm.setVisibility(View.VISIBLE);
 
-            if (response.containsKey("sourceOfFunds") &&
-                    response.containsKey("sourceOfFunds.provided") &&
-                    response.containsKey("sourceOfFunds.provided.card")) {
-                savedCardInfo = SavedCardInfoModel.newInstance(response.get("sourceOfFunds.provided.card"));
-            }
             check3dsEnrollment();
             Log.d("saveCard", "saveCard : " + saveCard);
             if (saveCard) {
                 generateTokenRequest();
-            }else{
-                savedCardInfo=null;
+            } else {
+                savedCardInfo = null;
             }
         }
 
@@ -435,73 +446,77 @@ public class ProcessPaymentActivity extends AppCompatActivity {
     class CheckAuthenticatePayerCallback implements ApiController.Check3DSecureEnrollmentCallback {
         @Override
         public void onSuccess(GatewayMap response) {
-            int apiVersionInt = Integer.valueOf(apiVersion);
-            //String threeDSecureId = (String) response.get("3DSecureId");
+            if(!isOperationsCanceled){
+                int apiVersionInt = Integer.valueOf(apiVersion);
+                //String threeDSecureId = (String) response.get("3DSecureId");
 
-            String html = null;
-            if (response.containsKey("authentication.redirectHtml")) {
-                html = (String) response.get("authentication.redirectHtml");
-            }
-
-            // for API versions <= 46, you must use the summary status field to determine next steps for 3DS
-            if (apiVersionInt <= 46) {
-                String summaryStatus = (String) response.get("3DSecure.summaryStatus");
-
-                if ("CARD_ENROLLED".equalsIgnoreCase(summaryStatus)) {
-                    Gateway.start3DSecureActivity(ProcessPaymentActivity.this, html);
-                    return;
+                String html = null;
+                if (response.containsKey("authentication.redirectHtml")) {
+                    html = (String) response.get("authentication.redirectHtml");
                 }
 
-                binding.check3dsProgress.setVisibility(View.GONE);
-                binding.check3dsSuccess.setVisibility(View.VISIBLE);
-                ProcessPaymentActivity.this.threeDSecureId = null;
+                // for API versions <= 46, you must use the summary status field to determine next steps for 3DS
+                if (apiVersionInt <= 46) {
+                    String summaryStatus = (String) response.get("3DSecure.summaryStatus");
 
-                // for these 2 cases, you still provide the 3DSecureId with the pay operation
-                if ("CARD_NOT_ENROLLED".equalsIgnoreCase(summaryStatus) || "AUTHENTICATION_NOT_AVAILABLE".equalsIgnoreCase(summaryStatus)) {
-                    ProcessPaymentActivity.this.threeDSecureId = threeDSecureId;
-                }
+                    if ("CARD_ENROLLED".equalsIgnoreCase(summaryStatus)) {
+                        Gateway.start3DSecureActivity(ProcessPaymentActivity.this, html);
+                        return;
+                    }
 
-                processPayment();
-            }
-
-            // for API versions >= 47, you must look to the gateway recommendation and the presence of 3DS info in the payload
-            else {
-                String gatewayRecommendation = (String) response.get("response.gatewayRecommendation");
-
-                // if DO_NOT_PROCEED returned in recommendation, should stop transaction
-                if ("DO_NOT_PROCEED".equalsIgnoreCase(gatewayRecommendation)) {
                     binding.check3dsProgress.setVisibility(View.GONE);
-                    binding.check3dsError.setVisibility(View.VISIBLE);
+                    binding.check3dsSuccess.setVisibility(View.VISIBLE);
+                    ProcessPaymentActivity.this.threeDSecureId = null;
 
-                    showResult(R.drawable.failed, R.string.pay_error_3ds_authentication_failed);
-                    return;
+                    // for these 2 cases, you still provide the 3DSecureId with the pay operation
+                    if ("CARD_NOT_ENROLLED".equalsIgnoreCase(summaryStatus) || "AUTHENTICATION_NOT_AVAILABLE".equalsIgnoreCase(summaryStatus)) {
+                        ProcessPaymentActivity.this.threeDSecureId = threeDSecureId;
+                    }
+
+                    processPayment();
                 }
 
-                String transactionStatus = (String) response.get("transaction.authenticationStatus");
-                boolean isRequestNotCompleted = transactionStatus == null || !transactionStatus.equalsIgnoreCase("AUTHENTICATION_SUCCESSFUL");
+                // for API versions >= 47, you must look to the gateway recommendation and the presence of 3DS info in the payload
+                else {
+                    String gatewayRecommendation = (String) response.get("response.gatewayRecommendation");
+
+                    // if DO_NOT_PROCEED returned in recommendation, should stop transaction
+                    if ("DO_NOT_PROCEED".equalsIgnoreCase(gatewayRecommendation)) {
+                        binding.check3dsProgress.setVisibility(View.GONE);
+                        binding.check3dsError.setVisibility(View.VISIBLE);
+
+                        showResult(R.drawable.failed, R.string.pay_error_3ds_authentication_failed);
+                        return;
+                    }
+
+                    String transactionStatus = (String) response.get("transaction.authenticationStatus");
+                    boolean isRequestNotCompleted = transactionStatus == null || !transactionStatus.equalsIgnoreCase("AUTHENTICATION_SUCCESSFUL");
 
 
-                // if PROCEED in recommendation, and we have HTML for 3ds, perform 3DS
-                if (html != null && isRequestNotCompleted) {
-                    Gateway.start3DSecureActivity(ProcessPaymentActivity.this, html);
-                    return;
+                    // if PROCEED in recommendation, and we have HTML for 3ds, perform 3DS
+                    if (html != null && isRequestNotCompleted) {
+                        Gateway.start3DSecureActivity(ProcessPaymentActivity.this, html);
+                        return;
+                    }
+                    binding.check3dsProgress.setVisibility(View.GONE);
+                    binding.check3dsSuccess.setVisibility(View.VISIBLE);
+                    ProcessPaymentActivity.this.threeDSecureId = threeDSecureId;
+
+                    processPayment();
                 }
-                binding.check3dsProgress.setVisibility(View.GONE);
-                binding.check3dsSuccess.setVisibility(View.VISIBLE);
-                ProcessPaymentActivity.this.threeDSecureId = threeDSecureId;
-
-                processPayment();
             }
         }
 
         @Override
         public void onError(Throwable throwable) {
-            Log.e(ProcessPaymentActivity.class.getSimpleName(), throwable.getMessage(), throwable);
+            if(!isOperationsCanceled) {
+                Log.e(ProcessPaymentActivity.class.getSimpleName(), throwable.getMessage(), throwable);
 
-            binding.check3dsProgress.setVisibility(View.GONE);
-            binding.check3dsError.setVisibility(View.VISIBLE);
+                binding.check3dsProgress.setVisibility(View.GONE);
+                binding.check3dsError.setVisibility(View.VISIBLE);
 
-            showResult(R.drawable.failed, R.string.pay_error_3ds_authentication_failed);
+                showResult(R.drawable.failed, R.string.pay_error_3ds_authentication_failed);
+            }
         }
     }
 
@@ -619,5 +634,11 @@ public class ProcessPaymentActivity extends AppCompatActivity {
         if (SDKConfigurations.magintsNBECallback != null) {
             SDKConfigurations.magintsNBECallback.onResult(callbackResultModel);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        isOperationsCanceled=true;
+        super.onBackPressed();
     }
 }

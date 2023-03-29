@@ -36,7 +36,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class CollectCardInfoActivity extends AppCompatActivity {
+public class CollectCardInfoActivity extends BaseActivity {
 
     private static final String EXTRA_PREFIX = "com.mastercard.gateway.sample.EXTRA_";
 

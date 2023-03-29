@@ -8,21 +8,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class SavedCardInfoModel {
 
-    /*public SavedCardInfo(String jsonMapString) {
-        super();
-
-        Map<? extends String, ? extends Object> map = new Gson().fromJson(jsonMapString, new TypeToken<Map<? extends String, ? extends Object>>() {
-        }.getType());
-
-        putAll(map);
-    }*/
-
+    @SerializedName("nameOnCard")
+    @Expose
+    private String nameOnCard;
     @SerializedName("brand")
     @Expose
     private String brand;
     @SerializedName("expiry")
     @Expose
-    private SavedCardExpiryDateModel expiry;
+    private String expiry;
     @SerializedName("fundingMethod")
     @Expose
     private String fundingMethod;
@@ -38,6 +32,8 @@ public class SavedCardInfoModel {
 
     private String savedCardToken;
 
+    private SavedCardExpiryDateModel expiryDate;
+
     public String getBrand() {
         return brand;
     }
@@ -46,12 +42,23 @@ public class SavedCardInfoModel {
         this.brand = brand;
     }
 
-    public SavedCardExpiryDateModel getExpiry() {
+    public String getExpiry() {
         return expiry;
     }
 
-    public void setExpiry(SavedCardExpiryDateModel expiry) {
+    public void setExpiry(String expiry) {
         this.expiry = expiry;
+    }
+
+    public SavedCardExpiryDateModel getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryMonth,String expiryYear) {
+        SavedCardExpiryDateModel expiryDateVal=new SavedCardExpiryDateModel();
+        expiryDateVal.setMonth(expiryMonth);
+        expiryDateVal.setYear(expiryYear);
+        this.expiryDate = expiryDateVal;
     }
 
     public String getFundingMethod() {
@@ -96,6 +103,14 @@ public class SavedCardInfoModel {
 
     public static SavedCardInfoModel newInstance(Object obj) {
         return new Gson().fromJson(new Gson().toJson(obj), SavedCardInfoModel.class);
+    }
+
+    public String getNameOnCard() {
+        return nameOnCard;
+    }
+
+    public void setNameOnCard(String nameOnCard) {
+        this.nameOnCard = nameOnCard;
     }
 
     @NonNull
