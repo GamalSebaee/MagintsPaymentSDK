@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangUtils.applyLocale(this,"ar")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
